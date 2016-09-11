@@ -16,7 +16,7 @@ var fetchToken = function() {
       if (this.status === 200) {
         var _jsonObj = JSON.parse(this.responseText);
         _token = _jsonObj.access_token
-        getOrders()
+        getSales()
       } else {
         alert('There was a problem with the request');
       }
@@ -28,7 +28,7 @@ var fetchToken = function() {
 };
 
 //Fetch data from the order datapoint
-var getOrders = function() {
+var getSales = function() {
   var req = new XMLHttpRequest();
   if (!req) {
     throw 'Unable to create HTTP Request.';
@@ -47,9 +47,9 @@ var getOrders = function() {
         for (i = 0; i < _jsonObj.length; i++) {
           for (j = 0; j < _jsonObj[i].entries.length; j++) {
           var item = {
-          "Product":_jsonObj[i].entries[j].product.name, 
+          "Customer":_jsonObj[i].customer.name, 
           "name": _jsonObj[i].entries[j].product.name,
-          "Number Sold": _jsonObj[i].entries[j].amount
+          "Sales ($)": _jsonObj[i].entries[j].totalPrice
           }
           
           data.push(item)
@@ -62,8 +62,8 @@ var getOrders = function() {
     .data(data)
     .type("bar")
     .id("name")
-    .x("Product")
-    .y("Number Sold")
+    .x("Customer")
+    .y("Sales ($)")
     .draw()
       } else {
         alert('There was a problem with the request');
