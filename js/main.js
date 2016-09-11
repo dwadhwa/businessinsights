@@ -77,5 +77,8 @@ var getOrders = function() {
 };
 
 window.onload = function () {
+if (_token == null)
   fetchToken();
+else 
+  getOrders();
 };

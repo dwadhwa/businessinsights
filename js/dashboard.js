@@ -43,12 +43,18 @@ var getOrders = function() {
       if (this.status === 200) {
         var response = req.responseText;
         var pops = document.getElementById('pops');
+        var dailysales = document.getElementById('sales');
         var _jsonObj = JSON.parse(response);
         var sales = 0
         var maxproduct = 0
         var maxproductname
         var maxproductimage
         var data = []
+        var transactions = _jsonObj.length + 1
+        var avgorderval
+        var transDiv = document.getElementById('transactions');
+        var avgDiv = document.getElementById('avg');
+        
         for (i = 0; i < _jsonObj.length; i++) {
           sales = sales + parseInt(_jsonObj[i].totalPrice)
 
@@ -63,16 +69,18 @@ var getOrders = function() {
                 maxproductname = _jsonObj[i].entries[j].product.name
                 maxproduct = data[_jsonObj[i].entries[j].product.name]
                 maxproductimage = _jsonObj[i].entries[j].product.images[0].url
-                console.log(maxproductimage)
             }
           }
-          pops.innerHTML = "<img width=70em src=" + maxproductimage + "\>" + "<p>" + maxproductname + " (" + maxproduct + " items)"
-
+          pops.innerHTML = "<img width=70em src=" + maxproductimage + "\>" + "<p>" + maxproductname + " (" + maxproduct + " items)";
+          dailysales.innerHTML = "<h4 style='color:green;'> Daily Sales $" + sales + "</h4>";
+          transDiv.innerHTML = '<span class="label label-info" style="padding: 1em; margin: 4em; font-size: 1em;">' + transactions + "</span>"
         var target = sales / 6000 * 100
         gauge1.update(target)
         
+        avgorderval = (sales / transactions).toFixed(2)
         
-
+        avgDiv.innerHTML = '<span class="label label-info" style="padding: 1em; margin: 4em; font-size: 1em;">' 
+        + '$ ' + avgorderval + "</span>"
         }
 
       } else {
@@ -87,7 +95,10 @@ var getOrders = function() {
 };
 
 window.onload = function () {
-  fetchToken();
+  if (_token == null)
+    fetchToken();
+  else 
+    getOrders();
   gauge1 = loadLiquidFillGauge("fillgauge1", 0);
 
 };

@@ -52,9 +52,13 @@
       <div class="starter-template">
         <h1>Dashboard</h1>
         <div class="row">
+          <div id="sales" class="col-md-12">
+          </div>
+        </div>
+        <div class="row">
           <hr>
           <div class="col-xs-6 col-md-6">
-            <p class="lead">Daily Sales</p>
+            <p class="lead">Sales Targets</p>
             <svg id="fillgauge1" width="5em" height="5em"></svg>
             <p>Target $6,000 per day</p>
           </div>
@@ -68,14 +72,16 @@
     <div class="row">
       <hr>
         <div class="col-xs-6 col-md-6">
-          <p class="lead">Insight #3</p>
-          Coming soon!
+          <p class="lead">Transactions</p>
+          <div id="transactions"></div>
+          <br>Per Day
         </div>
         <div class="col-xs-6 col-md-6">
-          <p class="lead">Insight #4</p>
-          Coming soon!
+          <p class="lead">Average Order Value</p>
+          <div id="avg"></div>
+          <br>Per Order
         </div>
-        </div>
+    </div>
     </div>
     </div><!-- /.container -->
     <!-- Bootstrap core JavaScript
