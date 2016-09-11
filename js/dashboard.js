@@ -1,6 +1,7 @@
 /* Function used to fetch data and call appropriate js method*/
-var _token = null
- 
+var _token
+var gauge1
+
 var fetchToken = function() {
   var clientId = 'Ay2Z4XGewvq7IWYsUzusV0RejU6U4L2z'
   var clientSecret = 'vjbFZVzxU5zPK54x'
@@ -41,30 +42,39 @@ var getOrders = function() {
     if (this.readyState === 4) {
       if (this.status === 200) {
         var response = req.responseText;
-        var innerdiv = document.getElementById('responsediv');
+        var pops = document.getElementById('pops');
         var _jsonObj = JSON.parse(response);
+        var sales = 0
+        var maxproduct = 0
+        var maxproductname
+        var maxproductimage
         var data = []
         for (i = 0; i < _jsonObj.length; i++) {
+          sales = sales + parseInt(_jsonObj[i].totalPrice)
+
           for (j = 0; j < _jsonObj[i].entries.length; j++) {
-          var item = {
-          "Product":_jsonObj[i].entries[j].product.name, 
-          "name": _jsonObj[i].entries[j].product.name,
-          "Number Sold": _jsonObj[i].entries[j].amount
-          }
           
-          data.push(item)
+            if(data[_jsonObj[i].entries[j].product.name] != null) {
+              data[_jsonObj[i].entries[j].product.name] += _jsonObj[i].entries[j].amount
+            } else {
+              data[_jsonObj[i].entries[j].product.name] = _jsonObj[i].entries[j].amount
+            }
+            if (data[_jsonObj[i].entries[j].product.name] > maxproduct) {
+                maxproductname = _jsonObj[i].entries[j].product.name
+                maxproduct = data[_jsonObj[i].entries[j].product.name]
+                maxproductimage = _jsonObj[i].entries[j].product.images[0].url
+                console.log(maxproductimage)
+            }
           }
-      
+          pops.innerHTML = "<img width=70em src=" + maxproductimage + "\>" + "<p>" + maxproductname + " (" + maxproduct + " items)"
+
+        var target = sales / 6000 * 100
+        gauge1.update(target)
+        
+        
+
         }
 
-  var visualization = d3plus.viz()
-    .container("#viz")
-    .data(data)
-    .type("bar")
-    .id("name")
-    .x("Product")
-    .y("Number Sold")
-    .draw()
       } else {
         alert('There was a problem with the request');
       }
@@ -78,4 +88,6 @@ var getOrders = function() {
 
 window.onload = function () {
   fetchToken();
+  gauge1 = loadLiquidFillGauge("fillgauge1", 0);
+
 };
